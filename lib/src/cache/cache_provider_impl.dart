@@ -98,17 +98,17 @@ class SharePreferenceCache extends CacheProvider {
   }
 
   @override
-  T getValue<T>(String key, T defaultValue) {
-    if (1.1 is T) {
+  T? getValue<T>(String key, [T? defaultValue]) {
+    if (T == double) {
       return _preferences.getDouble(key) as T;
     }
-    if (1 is T) {
+    if (T == int) {
       return _preferences.getInt(key) as T;
     }
-    if (true is T) {
+    if (T == bool) {
       return _preferences.getBool(key) as T;
     }
-    if ('' is T) {
+    if (T == String) {
       return _preferences.getString(key) as T;
     }
     throw Exception('No Implementation Found for type ${T.toString()}');

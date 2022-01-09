@@ -552,7 +552,7 @@ class _SettingsSwitch extends StatelessWidget {
 /// [_SettingsRadio] is a Settings UI version of the [Radio] widgets
 class _SettingsRadio<T> extends StatelessWidget {
   /// value of the selected radio in this group
-  final T groupValue;
+  final T? groupValue;
 
   /// value of the current radio widget
   final T value;
@@ -584,19 +584,19 @@ class _SettingsRadio<T> extends StatelessWidget {
 /// [_SettingsDropDown] is a Settings UI version of the [DropdownButton]
 class _SettingsDropDown<T> extends StatelessWidget {
   /// value of the selected in this dropdown
-  final T selected;
+  final T? selected;
 
   /// Alignment of the dropdown. Defaults to [AlignmentDirectional.centerEnd].
   final AlignmentGeometry alignment;
 
   /// List of values for this dropdown
-  final List<T> values;
+  final List<T?> values;
 
   /// on change call back to handle selected value change
-  final OnChanged<T> onChanged;
+  final OnChanged<T?> onChanged;
 
   /// single item builder for creating a [DropdownMenuItem]
-  final ItemBuilder<T> itemBuilder;
+  final ItemBuilder<T?> itemBuilder;
 
   /// flag which represents the state of the settings, if false the the tile will
   /// ignore all the user inputs
@@ -616,14 +616,14 @@ class _SettingsDropDown<T> extends StatelessWidget {
     return Wrap(
       alignment: WrapAlignment.end,
       children: <Widget>[
-        DropdownButton<T>(
+        DropdownButton<T?>(
           isDense: true,
           value: selected,
           alignment: alignment,
           onChanged: enabled ? onChanged : null,
           underline: Container(),
           items: values.map<DropdownMenuItem<T>>(
-            (T val) {
+            (T? val) {
               return DropdownMenuItem<T>(
                 value: val,
                 child: itemBuilder(val),

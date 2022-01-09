@@ -92,7 +92,7 @@ class Settings {
   ///
   /// If there's no value found associated with the [key] then the [defaultValue]
   /// is returned.
-  static T getValue<T>(String key, T defaultValue) {
+  static T? getValue<T>(String key, [T? defaultValue]) {
     ensureCacheProvider();
     final containsKey = _cacheProvider?.containsKey(key);
     if (containsKey ?? false) {
@@ -105,7 +105,7 @@ class Settings {
   /// method to set [value] using the [cacheProvider] for given [key]
   static Future<void> setValue<T>(
     String key,
-    T value, {
+    T? value, {
     bool notify = false,
   }) async {
     ensureCacheProvider();
@@ -186,8 +186,8 @@ Map<String, List<ValueChangeNotifier>> _notifiers =
 /// [cacheKey]
 class ValueChangeObserver<T> extends StatefulWidget {
   final String cacheKey;
-  final T defaultValue;
-  final InternalWidgetBuilder<T> builder;
+  final T? defaultValue;
+  final InternalWidgetBuilder<T?> builder;
 
   const ValueChangeObserver({
     required this.cacheKey,
@@ -204,9 +204,9 @@ class _ValueChangeObserverState<T> extends State<ValueChangeObserver<T>> {
 
   String get cacheKey => widget.cacheKey;
 
-  T get defaultValue => widget.defaultValue;
+  T? get defaultValue => widget.defaultValue;
 
-  late ValueChangeNotifier<T> notifier;
+  late ValueChangeNotifier<T?> notifier;
 
   @override
   void initState() {
@@ -220,11 +220,11 @@ class _ValueChangeObserverState<T> extends State<ValueChangeObserver<T>> {
     value = Settings.getValue<T>(cacheKey, defaultValue);
 
     // assign a notifier
-    notifier = ValueChangeNotifier<T>(cacheKey, value);
+    notifier = ValueChangeNotifier<T?>(cacheKey, value);
 
     // add notifier to [_notifiers] map
     if (!_notifiers.containsKey(cacheKey)) {
-      _notifiers[cacheKey] = List<ValueChangeNotifier<T>>.empty(growable: true);
+      _notifiers[cacheKey] = List<ValueChangeNotifier<T?>>.empty(growable: true);
     }
     _notifiers[cacheKey]?.add(notifier);
     super.initState();
@@ -232,9 +232,9 @@ class _ValueChangeObserverState<T> extends State<ValueChangeObserver<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<T>(
+    return ValueListenableBuilder<T?>(
       valueListenable: notifier,
-      builder: (BuildContext context, T value, Widget? child) {
+      builder: (BuildContext context, T? value, Widget? child) {
         return widget.builder(context, value, onChange);
       },
     );
@@ -242,7 +242,7 @@ class _ValueChangeObserverState<T> extends State<ValueChangeObserver<T>> {
 
   /// This method is used to trigger all the associated notifiers
   /// when associated value is changed in cache
-  void onChange(T newValue) {
+  void onChange(T? newValue) {
     _notifiers[cacheKey]?.forEach((notifier) {
       notifier.value = newValue;
     });

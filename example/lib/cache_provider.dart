@@ -94,7 +94,7 @@ class HiveCache extends CacheProvider {
   }
 
   @override
-  T getValue<T>(String key, T defaultValue) {
+  T getValue<T>(String key, [T defaultValue]) {
     var value = _preferences.get(key);
     if (value is T) {
       return value;
