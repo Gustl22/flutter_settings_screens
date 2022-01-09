@@ -593,7 +593,7 @@ class _SettingsDropDown<T> extends StatelessWidget {
   final List<T> values;
 
   /// on change call back to handle selected value change
-  final OnChanged<T?> onChanged;
+  final OnChanged<T> onChanged;
 
   /// single item builder for creating a [DropdownMenuItem]
   final ItemBuilder<T> itemBuilder;

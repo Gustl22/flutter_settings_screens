@@ -1211,8 +1211,7 @@ class _DropDownSettingsTileState<T> extends State<DropDownSettingsTile<T>> {
     );
   }
 
-  Future<void> _handleDropDownChange(T? value, OnChanged<T> onChanged) async {
-    if (value == null) return;
+  Future<void> _handleDropDownChange(T value, OnChanged<T> onChanged) async {
     selectedValue = value;
     onChanged(value);
     widget.onChange?.call(value);
