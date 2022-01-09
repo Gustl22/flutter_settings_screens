@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/scheduler.dart';
 
 import '../../flutter_settings_screens.dart';
 import '../utils/utils.dart';
@@ -530,7 +531,9 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
       defaultValue: widget.initialValue,
       builder:
           (BuildContext context, String? value, OnChanged<String> onChanged) {
-        _controller.text = value ?? '';
+        SchedulerBinding.instance?.addPostFrameCallback((_) {
+          if(value != null) _controller.text = value;
+        });
         return _ModalSettingsTile<String>(
           title: widget.title,
           subtitle: widget.obscureText ? '' : value,
@@ -604,18 +607,10 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
   }
 
   bool _submitText(String newValue) {
-    var isValid = true;
     final state = _formKey.currentState;
-    if (state != null) {
-      isValid = state.validate();
-    }
-
-    if (isValid) {
-      state?.save();
-      return true;
-    }
-
-    return false;
+    if (state != null && !state.validate()) return false;
+    state?.save();
+    return true;
   }
 
   void _onSave(String? newValue, OnChanged<String> onChanged) {
